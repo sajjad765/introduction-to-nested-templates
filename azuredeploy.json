@@ -26,7 +26,8 @@
     },
     "variables": {
         "baseUri":"https://raw.githubusercontent.com/sajjad765/introduction-to-nested-templates/master",
-        "baseUri":"https://raw.githubusercontent.com/[your git user name]/introduction-to-nested-templates/master"
+        "ADInstallScript":"[concat(variables('baseUri'),'/','script-extensions/deploy-ad.ps1')]",
+        "ADJoinScript":"[concat(variables('baseUri'),'/','script-extensions/domain-join.ps1')]"
     },
     "resources": [
         {
@@ -42,6 +43,27 @@
                 }
             }
          },
+         {
+            "name": "MemberServer",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2016-09-01",
+            "dependsOn": [ 
+                "Microsoft.Resources/deployments/VirtualNetworkWithDNS"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                "uri": "[concat(variables('baseUri'), '/', 'nested-templates/member-server.json')]",
+                "contentVersion": "1.0.0.0"
+                },
+               "parameters":{
+                    "adminUserName":{"value": "[parameters('adminUserName')]"},
+                    "adminPassword":{"value": "[parameters('adminPassword')]"},
+                    "domainName":{"value": "[parameters('domainName')]"},
+                    "DomainJoinscriptUrl":{"value": "[variables('ADJoinScript')]"}
+                }
+            }
+        },
          {
             "name": "ActiveDirectory",
             "type": "Microsoft.Resources/deployments",
