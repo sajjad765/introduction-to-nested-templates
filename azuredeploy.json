@@ -54,6 +54,7 @@
                 "mode": "Incremental",
                 "templateLink": {
                 "uri": "[concat(variables('baseUri'), '/', 'nested-templates/member-server.json')]",
+                "uri": "[concat(variables('baseUri'), '/', 'nested-templates/vnet-with-dns.json')]",
                 "contentVersion": "1.0.0.0"
                 },
                "parameters":{
